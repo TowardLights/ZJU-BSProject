@@ -11,7 +11,8 @@ export default defineConfig({
     vueDevTools(),
   ],
   server: {
-    host: 'localhost',
+    // host: 'localhost',
+    host: '10.162.146.133',
     port: '5173',
     open: true,
   },

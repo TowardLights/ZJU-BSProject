@@ -128,6 +128,6 @@ button[type="button"]:hover {
 
 span {
   color: red;
-  font-size: 12px;
+  font-size: 13px;
 }
 </style>
