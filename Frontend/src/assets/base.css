@@ -19,6 +19,11 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+
+  --gradient-light: linear-gradient(to bottom, #ff7e5f, #feb47b);
+  /* Light模式下的渐变背景色 */
+  --gradient-dark: linear-gradient(to bottom, #2c3e50, #4ca1af);
+  /* Dark模式下的渐变背景色 */
 }
 
 /* semantic color variables for this project */
@@ -26,6 +31,7 @@
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
+  --color-background-gradient: var(--gradient-light);
 
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
@@ -41,6 +47,7 @@
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
     --color-background-mute: var(--vt-c-black-mute);
+    --color-background-gradient: var(--gradient-dark);
 
     --color-border: var(--vt-c-divider-dark-2);
     --color-border-hover: var(--vt-c-divider-dark-1);
@@ -61,7 +68,7 @@
 body {
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
+  background: var(--color-background-gradient);
   transition:
     color 0.5s,
     background-color 0.5s;
