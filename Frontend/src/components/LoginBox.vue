@@ -1,6 +1,7 @@
 <script setup>
 import router from '@/router';
 import { ref } from 'vue';
+import axios from 'axios';
 
 const isLogin = ref(true);
 const username = ref('');
@@ -9,6 +10,7 @@ const password = ref('');
 const usernameError = ref('');
 const emailError = ref('');
 const passwordError = ref('');
+const serverError = ref(''); // 定义 serverError
 
 const toggleMode = () => {
   isLogin.value = !isLogin.value;
@@ -19,6 +21,7 @@ const clearErrors = () => {
   usernameError.value = '';
   emailError.value = '';
   passwordError.value = '';
+  serverError.value = ''; // 清空 serverError
 };
 
 const validateEmail = (email) => {
@@ -26,7 +29,7 @@ const validateEmail = (email) => {
   return re.test(email);
 };
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   clearErrors();
   let valid = true;
 
@@ -42,22 +45,48 @@ const handleSubmit = () => {
 
   if (valid) {
     if (isLogin.value) {
-      login();
+      await login();
     } else {
-      register();
+      await register();
     }
   }
 };
 
-const login = () => {
-  // 登录逻辑
-  console.log('登录:', email.value, password.value);
-  router.push('/shopping');
+const login = async () => {
+  try {
+    const response = await axios.post('http://localhost:3000/user/login', {
+      email: email.value,
+      password: password.value,
+    });
+    if (response.data.success) {
+      localStorage.setItem('token', response.data.token);
+      router.push('/shopping');
+    } else {
+      serverError.value = response.data.message;
+    }
+  } catch (error) {
+    serverError.value = '登录失败，请稍后再试';
+  }
 };
 
-const register = () => {
-  // 注册逻辑
-  console.log('注册:', username.value, email.value, password.value);
+const register = async () => {
+  try {
+    const response = await axios.post('http://localhost:3000/user/register', {
+      username: username.value,
+      email: email.value,
+      password: password.value,
+    });
+    if (response.data.success) {
+      isLogin.value = true;
+      clearErrors();
+      email.value = '';
+      password.value = '';
+    } else {
+      serverError.value = response.data.message;
+    }
+  } catch (error) {
+    serverError.value = '注册失败，请稍后再试';
+  }
 };
 </script>
 
@@ -76,6 +105,7 @@ const register = () => {
       <label for="password">密码:</label>
       <input type="password" v-model="password" id="password" />
       <span v-if="passwordError">{{ passwordError }}</span>
+      <span v-if="serverError">{{ serverError }}</span> <!-- 显示 serverError -->
       <button type="submit">{{ isLogin ? '登录' : '注册' }}</button>
       <button type="button" @click="toggleMode">{{ isLogin ? '没有账号？注册' : '已有账号？登录' }}</button>
     </form>
