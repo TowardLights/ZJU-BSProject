@@ -1,7 +1,35 @@
+<script setup>
+import SearchBar from '@/components/SearchBar.vue';
+import ProductList from '@/components/ProductList.vue';
+import UserCenterLink from '@/components/UserCenterLink.vue';
+</script>
+
 <template>
+  <header>
+    <SearchBar class="search-bar" />
+    <UserCenterLink class="user-center-link" />
+  </header>
+
   <main>
-    <div>
-      ShoppingView
-    </div>
+    <!-- <ProductList /> -->
   </main>
 </template>
+
+<style scoped>
+.search-bar {
+  margin: auto;
+  position: absolute;
+  top: 2rem;
+  left: 35%;
+  background-color: transparent;
+}
+
+.user-center-link {
+  margin: auto;
+  position: absolute;
+  top: 2rem;
+  padding: 10px 20px;
+  left: 4rem;
+  /* background-color: whitesmoke; */
+}
+</style>

@@ -11,7 +11,7 @@ router.post('/login', async (req, res) => {
   try {
     const isValidUser = await dbApi.verifyUser(email, password);
     if (isValidUser) {
-      const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '1h' });
+      const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: 3600 });
       res.status(200).json({ success: true, message: '登录成功', token });
     } else {
       res.status(200).json({ success: false, message: '邮箱或密码错误' });
@@ -42,6 +42,26 @@ router.post('/register', async (req, res) => {
     console.error('注册错误:', error); // 记录错误信息
     res.status(500).json({ success: false, message: '用户注册失败' });
   }
+});
+
+router.get('/user-center', async (req, res) => {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).json({ success: false, message: '未提供token' });
+  }
+  jwt.verify(token.split(' ')[1], SECRET_KEY, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ success: false, message: 'token无效' });
+    }
+    const { email } = decoded;
+    try {
+      const user = await dbApi.getUser(email);
+      res.status(200).json({ success: true, user });
+    } catch (error) {
+      console.error('获取用户信息错误:', error);
+      res.status(500).json({ success: false, message: '获取用户信息失败' });
+    }
+  });
 });
 
 module.exports = router;
