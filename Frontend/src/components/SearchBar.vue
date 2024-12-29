@@ -1,24 +1,12 @@
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
-import router from '@/router';
+import { defineEmits } from 'vue';
 
 const query = ref('');
+const emit = defineEmits(['search']);
 
-const search = async () => {
-  try {
-    const token = localStorage.getItem('token');
-    const response = await axios.post('http://10.162.146.133:3000/shopping/search',
-      { query: query.value },
-      { headers: { Authorization: `Bearer ${token}` } });
-    if (response.data.success) {
-      // 处理搜索结果
-    } else {
-      // router.push('/');
-    }
-  } catch (error) {
-    // router.push('/');
-  }
+const search = () => {
+  emit('search', query.value);
 };
 </script>
 

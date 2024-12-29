@@ -1,17 +1,24 @@
 <script setup>
+import { ref } from 'vue';
 import SearchBar from '@/components/SearchBar.vue';
 import ProductList from '@/components/ProductList.vue';
 import UserCenterLink from '@/components/UserCenterLink.vue';
+
+const searchQuery = ref('');
+
+const handleSearch = (query) => {
+  searchQuery.value = query;
+};
 </script>
 
 <template>
   <header>
-    <SearchBar class="search-bar" />
+    <SearchBar class="search-bar" @search="handleSearch" />
     <UserCenterLink class="user-center-link" />
   </header>
 
   <main>
-    <!-- <ProductList /> -->
+    <ProductList :searchQuery="searchQuery" />
   </main>
 </template>
 

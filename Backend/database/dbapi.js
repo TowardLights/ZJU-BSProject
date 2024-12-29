@@ -123,6 +123,18 @@ class DatabaseApi {
       });
     });
   }
+
+  async insertProduct(productName, imageUrl, currentPrice, platform, storeName, productUrl) {
+    const query = 'INSERT INTO products (product_name, image_url, current_price, platform, store_name, product_url) VALUES (?, ?, ?, ?, ?, ?)';
+    return new Promise((resolve, reject) => {
+      this.connection.query(query, [productName, imageUrl, currentPrice, platform, storeName, productUrl], (error, results) => {
+        if (error) {
+          return reject(error);
+        }
+        resolve(results);
+      });
+    });
+  }
 }
 
 const databaseApi = new DatabaseApi();
