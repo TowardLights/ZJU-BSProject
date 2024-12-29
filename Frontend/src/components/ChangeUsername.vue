@@ -8,7 +8,7 @@ const usernameError = ref('');
 const changeUsername = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post('http://localhost:3000/user/change-username', {
+    const response = await axios.post('http://10.162.146.133:3000/user/change-username', {
       newUsername: newUsername.value
     }, {
       headers: { Authorization: `Bearer ${token}` }

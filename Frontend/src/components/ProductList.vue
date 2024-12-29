@@ -6,7 +6,7 @@ const products = ref([]);
 
 onMounted(async () => {
     try {
-        const response = await axios.get('http://localhost:3000/shopping/products');
+        const response = await axios.get('http://10.162.146.133:3000/shopping/products');
         products.value = response.data.products;
     } catch (error) {
         console.error('获取商品信息失败', error);

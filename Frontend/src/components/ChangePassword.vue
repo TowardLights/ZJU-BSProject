@@ -14,7 +14,7 @@ const changePassword = async () => {
 
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post('http://localhost:3000/user/change-password', {
+    const response = await axios.post('http://10.162.146.133:3000/user/change-password', {
       oldPassword: oldPassword.value,
       newPassword: newPassword.value
     }, {

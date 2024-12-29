@@ -28,4 +28,12 @@ import LogoutButton from '@/components/LogoutButton.vue';
     top: 30%;
     left: 35%;
 }
+
+@media (max-width: 600px) {
+    .user-center-view {
+        position: relative;
+        top: 10rem;
+        left: 0;
+    }
+}
 </style>

@@ -8,7 +8,7 @@ const query = ref('');
 const search = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post('http://localhost:3000/shopping/search',
+    const response = await axios.post('http://10.162.146.133:3000/shopping/search',
       { query: query.value },
       { headers: { Authorization: `Bearer ${token}` } });
     if (response.data.success) {

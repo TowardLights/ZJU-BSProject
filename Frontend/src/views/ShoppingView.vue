@@ -32,4 +32,19 @@ import UserCenterLink from '@/components/UserCenterLink.vue';
   left: 10%;
   /* background-color: whitesmoke; */
 }
+
+@media (max-width: 600px) {
+  .search-bar {
+    position: relative;
+    top: 2rem;
+    left: 10%;
+  }
+
+  .user-center-link {
+    position: relative;
+    top: -0.8rem;
+    left: -8%;
+  }
+
+}
 </style>

@@ -7,7 +7,7 @@ const username = ref('');
 const fetchUserInfo = async () => {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/user/user-center', {
+        const response = await axios.get('http://10.162.146.133:3000/user/user-center', {
             headers: { Authorization: `Bearer ${token}` }
         });
         if (response.data.success) {
