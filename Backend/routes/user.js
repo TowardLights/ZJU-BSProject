@@ -64,4 +64,54 @@ router.get('/user-center', async (req, res) => {
   });
 });
 
+router.post('/change-username', async (req, res) => {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).json({ success: false, message: '未提供token' });
+  }
+  jwt.verify(token.split(' ')[1], SECRET_KEY, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ success: false, message: 'token无效' });
+    }
+    const { email } = decoded;
+    const { newUsername } = req.body;
+    try {
+      await dbApi.updateUsername(email, newUsername);
+      res.status(200).json({ success: true, message: '用户名更新成功' });
+    } catch (error) {
+      if (error.message === '用户名重复') {
+        res.status(200).json({ success: false, message: '用户名重复' });
+      } else {
+        console.error('更新用户名错误:', error);
+        res.status(500).json({ success: false, message: '更新用户名失败' });
+      }
+    }
+  });
+});
+
+router.post('/change-password', async (req, res) => {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).json({ success: false, message: '未提供token' });
+  }
+  jwt.verify(token.split(' ')[1], SECRET_KEY, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ success: false, message: 'token无效' });
+    }
+    const { email } = decoded;
+    const { oldPassword, newPassword } = req.body;
+    try {
+      await dbApi.updatePassword(email, oldPassword, newPassword);
+      res.status(200).json({ success: true, message: '密码更新成功' });
+    } catch (error) {
+      if (error.message === '旧密码不正确') {
+        res.status(200).json({ success: false, message: '旧密码不正确' });
+      } else {
+        console.error('更新密码错误:', error);
+        res.status(500).json({ success: false, message: '更新密码失败' });
+      }
+    }
+  });
+});
+
 module.exports = router;

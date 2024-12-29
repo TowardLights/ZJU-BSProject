@@ -57,6 +57,49 @@ class DatabaseApi {
     });
   }
 
+  async updateUsername(email, newUsername) {
+    // 检查用户名是否存在
+    const checkQuery = 'SELECT * FROM users WHERE user_name = ?';
+    const updateQuery = 'UPDATE users SET user_name = ? WHERE email = ?';
+    return new Promise((resolve, reject) => {
+      this.connection.query(checkQuery, [newUsername], (error, results) => {
+        if (error) {
+          return reject(error);
+        }
+        if (results.length > 0) {
+          return reject(new Error('用户名重复'));
+        }
+        this.connection.query(updateQuery, [newUsername, email], (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          resolve(results);
+        });
+      });
+    });
+  }
+
+  async updatePassword(email, oldPassword, newPassword) {
+    const verifyQuery = 'SELECT * FROM users WHERE email = ? AND password = ?';
+    const updateQuery = 'UPDATE users SET password = ? WHERE email = ?';
+    return new Promise((resolve, reject) => {
+      this.connection.query(verifyQuery, [email, oldPassword], (error, results) => {
+        if (error) {
+          return reject(error);
+        }
+        if (results.length === 0) {
+          return reject(new Error('旧密码不正确'));
+        }
+        this.connection.query(updateQuery, [newPassword, email], (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          resolve(results);
+        });
+      });
+    });
+  }
+
   async searchProducts(query) {
     const searchQuery = 'SELECT * FROM products WHERE MATCH(product_name) AGAINST(? IN NATURAL LANGUAGE MODE)';
     return new Promise((resolve, reject) => {

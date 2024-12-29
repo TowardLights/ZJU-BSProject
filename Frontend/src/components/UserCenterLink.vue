@@ -29,7 +29,7 @@ const goToUserCenter = () => {
 
 <template>
     <div class="user-center" @click="goToUserCenter">
-        用户中心：{{ username }}
+        当前用户：{{ username }}
     </div>
 </template>
 

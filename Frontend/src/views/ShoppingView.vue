@@ -19,7 +19,7 @@ import UserCenterLink from '@/components/UserCenterLink.vue';
 .search-bar {
   margin: auto;
   position: absolute;
-  top: 2rem;
+  top: 4rem;
   left: 35%;
   background-color: transparent;
 }
@@ -27,9 +27,9 @@ import UserCenterLink from '@/components/UserCenterLink.vue';
 .user-center-link {
   margin: auto;
   position: absolute;
-  top: 2rem;
+  top: 4rem;
   padding: 10px 20px;
-  left: 4rem;
+  left: 10%;
   /* background-color: whitesmoke; */
 }
 </style>
