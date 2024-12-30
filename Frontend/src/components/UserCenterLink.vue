@@ -14,9 +14,11 @@ const fetchUserInfo = async () => {
             username.value = response.data.user.user_name;
         } else {
             router.push('/');
+            alert('未获取到用户信息，请先登录');
         }
     } catch (error) {
         router.push('/');
+        alert('未获取到用户信息，请先登录');
     }
 };
 

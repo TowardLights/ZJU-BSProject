@@ -16,10 +16,11 @@ const fetchUserInfo = async () => {
     }
     else {
       router.push('/');
+      alert('获取用户信息失败，请重新登录', error);
     }
   } catch (error) {
+    alert('获取用户信息失败，请重新登录', error);
     router.push('/');
-    console.error('获取用户信息失败', error);
   }
 };
 

@@ -14,7 +14,7 @@ export default defineConfig({
     // host: 'localhost',
     host: '10.162.146.133',
     port: '5173',
-    open: true,
+    open: false,
   },
   resolve: {
     alias: {
