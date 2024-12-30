@@ -16,9 +16,6 @@ async function fetchProducts(query, maxPages) {
   const encodedQuery = iconv.encode(query, 'gb2312');
   const urlEncodedQuery = encodedQuery.toString('binary').split('').map(char => '%' + char.charCodeAt(0).toString(16).toUpperCase()).join('');
 
-  console.log('encodedQuery: ', encodedQuery);
-  console.log('urlEncodedQuery:', urlEncodedQuery);
-
   for (let page = 1; page <= maxPages; page++) {
     const response = await axios.get(`https://ss.manmanbuy.com/Default.aspx?PageID=${page}&key=${urlEncodedQuery}`, {
       responseType: 'arraybuffer',
@@ -66,6 +63,54 @@ async function fetchProducts(query, maxPages) {
   return products;
 }
 
+async function fetchHistoryPrices(productUrl) {
+
+  const urlEncodedQuery = encodeURIComponent(productUrl);
+  // console.log('urlEncodedQuery:', urlEncodedQuery);
+
+  const response = await axios.get(`https://p.zwjhl.com/price.aspx?url=${urlEncodedQuery}&event=searchPrice`, {
+    headers: {
+      'Cookie': 'ASP.NET_SessionId=npyfn1dd1v5mv0n0a1we3zpn; Hm_lvt_72b68c351b528b0e3406619a64d8f8d0=1735491538; HMACCOUNT=70FB92ECC9FE62F0; 69a1a_mmbuser=V09xQG5HAAJ%2bBV5ZeU5WBC4pb3dQQG1jMAtwcTkAVlMFU1VVAABQBQ0HUgBTDAhQBgNVB1FXDl0AVw8IBTg%3d; lsjgcxToken=6E50054E357C53F305D2DD93260D1BCA410C0F81BDD81FC15E24F9D9888F0196793C8D244F21D19C6674045A3E0D4F8C3E403A041F42E42744CA59E36CA6C0BE; lsjgcxToken=6E50054E357C53F305D2DD93260D1BCA410C0F81BDD81FC15E24F9D9888F0196793C8D244F21D19C6674045A3E0D4F8C3E403A041F42E42744CA59E36CA6C0BE; auth_token=bggNSWl3Vi5wdXoYcGEFawYxDW92cgxAAVVVZWF0A119cBcTW2xfcG5cLiBkBWZlc3ZyYCE1CHBhVnpkJydZZXJUfGFyACU8fFQEcG5HWy9zYFcO; lsjgcx_userdev=%7b%22FirstDate%22%3a%222024-12-30+00%3a58%3a57%22%2c%22FirstLoginDate%22%3a%222024-12-30+01%3a10%3a23%22%2c%22LastLoginDate%22%3a%222024-12-30+13%3a47%3a53%22%2c%22DevNum%22%3a%22c45d8ac6051741daa8c9eca1b5faa15b%22%7d; Hm_lpvt_72b68c351b528b0e3406619a64d8f8d0=1735537691',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
+      'Accept-Encoding': 'gzip, deflate, br, zstd',
+      'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,en-GB;q=0.6',
+    }
+  });
+
+  const $ = cheerio.load(response.data);
+  // console.log('response.data:', response.data);
+
+  // 提取图表标题
+  const chartTitle = $('h1').text().trim();
+  // console.log('chartTitle:', chartTitle);
+
+  // 提取当前价和历史最低价
+  const currentPrice = $('.title-container .title-item').eq(0).find('b').text().trim();
+  const lowestPrice = $('.title-container .title-item').eq(1).find('b').text().trim();
+
+  // 提取价格数据
+  const scriptContent = $('script:contains("flotChart.chartNow")').html();
+  const dataPattern = /\[([0-9]+),([0-9]+\.[0-9]+),""]/g;
+  let match;
+  const historyPrices = [];
+
+  while ((match = dataPattern.exec(scriptContent)) !== null) {
+    const timestamp = parseInt(match[1]);
+    const price = parseFloat(match[2]);
+    historyPrices.push({
+      date: new Date(timestamp).toISOString().split('T')[0],
+      price: price
+    });
+  }
+
+  return {
+    chartTitle,
+    currentPrice,
+    lowestPrice,
+    historyPrices
+  };
+}
+
 router.post('/search', async (req, res) => {
   const token = req.headers['authorization'];
   if (!token) {
@@ -97,4 +142,24 @@ router.get('/products', async (req, res) => {
   }
 });
 
+router.post('/history-price', async (req, res) => {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).json({ success: false, message: '未提供token' });
+  }
+
+  jwt.verify(token.split(' ')[1], SECRET_KEY, async (err) => {
+    if (err) {
+      return res.status(401).json({ success: false, message: '无效的token' });
+    }
+    const { productUrl } = req.body;
+    try {
+      const historyPricesInfo = await fetchHistoryPrices(productUrl);
+      res.status(200).json({ success: true, historyPricesInfo });
+    } catch (error) {
+      console.error('获取历史价格错误:', error);
+      res.status(500).json({ success: false, message: '获取历史价格失败' });
+    }
+  });
+});
 module.exports = router;

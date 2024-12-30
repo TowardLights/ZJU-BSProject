@@ -22,6 +22,11 @@ const router = createRouter({
       name: 'user-center',
       component: () => import('../views/UserCenterView.vue'),
     },
+    {
+      path: '/history-price',
+      name: 'history-price',
+      component: () => import('../views/HistoryPriceView.vue'),
+    }
   ],
 })
 

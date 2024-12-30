@@ -11,7 +11,7 @@ router.post('/login', async (req, res) => {
   try {
     const isValidUser = await dbApi.verifyUser(email, password);
     if (isValidUser) {
-      const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: 3600 });
+      const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: 24 * 3600 });
       res.status(200).json({ success: true, message: '登录成功', token });
     } else {
       res.status(200).json({ success: false, message: '邮箱或密码错误' });
@@ -110,6 +110,27 @@ router.post('/change-password', async (req, res) => {
         console.error('更新密码错误:', error);
         res.status(500).json({ success: false, message: '更新密码失败' });
       }
+    }
+  });
+});
+
+router.post('/price-alert', async (req, res) => {
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(401).json({ success: false, message: '未提供token' });
+  }
+  jwt.verify(token.split(' ')[1], SECRET_KEY, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ success: false, message: 'token无效' });
+    }
+    const { email } = decoded;
+    const { productUrl, targetPrice } = req.body;
+    try {
+      await dbApi.addPriceAlert(email, productUrl, targetPrice);
+      res.status(200).json({ success: true, message: '价格提醒设置成功' });
+    } catch (error) {
+      console.error('设置价格提醒错误:', error);
+      res.status(500).json({ success: false, message: '设置价格提醒失败' });
     }
   });
 });
