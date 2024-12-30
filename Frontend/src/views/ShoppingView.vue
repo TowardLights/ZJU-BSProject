@@ -14,7 +14,6 @@ const handleSearch = (query) => {
 <template>
   <header>
     <SearchBar class="search-bar" @search="handleSearch" />
-    <UserCenterLink class="user-center-link" />
   </header>
 
   <main>
@@ -31,27 +30,12 @@ const handleSearch = (query) => {
   background-color: transparent;
 }
 
-.user-center-link {
-  margin: auto;
-  position: absolute;
-  top: 4rem;
-  padding: 10px 20px;
-  left: 10%;
-  /* background-color: whitesmoke; */
-}
-
 @media (max-width: 600px) {
   .search-bar {
     position: relative;
     top: 2rem;
-    left: 10%;
+    left: 3%;
+    width: 100%;
   }
-
-  .user-center-link {
-    position: relative;
-    top: -0.8rem;
-    left: -8%;
-  }
-
 }
 </style>
