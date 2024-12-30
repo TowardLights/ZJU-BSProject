@@ -10,6 +10,10 @@ var usersRouter = require('./routes/user');
 var shoppingRouter = require('./routes/shopping');
 var app = express();
 
+// 引入定时任务模块
+var cronJobs = require('./utils/cronJobs');
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -40,5 +44,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// 启动定时任务
+cronJobs.start();
 
 module.exports = app;

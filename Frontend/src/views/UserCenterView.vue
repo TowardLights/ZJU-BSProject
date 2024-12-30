@@ -11,7 +11,7 @@ import LogoutButton from '@/components/LogoutButton.vue';
         <UserInfo />
         <ChangeUsername />
         <ChangePassword />
-        <!-- <PriceAlert /> -->
+        <PriceAlert />
         <LogoutButton />
     </div>
 </template>
@@ -25,14 +25,14 @@ import LogoutButton from '@/components/LogoutButton.vue';
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: absolute;
-    top: 30%;
+    top: 20%;
     left: 35%;
 }
 
 @media (max-width: 600px) {
     .user-center-view {
         position: relative;
-        top: 10rem;
+        top: 5rem;
         left: 0;
     }
 }

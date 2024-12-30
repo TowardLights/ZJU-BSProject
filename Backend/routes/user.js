@@ -124,9 +124,9 @@ router.post('/price-alert', async (req, res) => {
       return res.status(401).json({ success: false, message: 'token无效' });
     }
     const { email } = decoded;
-    const { productUrl, targetPrice } = req.body;
+    const { productName, targetPrice } = req.body;
     try {
-      await dbApi.addPriceAlert(email, productUrl, targetPrice);
+      await dbApi.addPriceAlert(email, productName, targetPrice);
       res.status(200).json({ success: true, message: '价格提醒设置成功' });
     } catch (error) {
       console.error('设置价格提醒错误:', error);

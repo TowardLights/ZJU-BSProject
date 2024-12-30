@@ -2,23 +2,23 @@
 import { ref } from 'vue';
 import axios from 'axios';
 
-const product = ref('');
-const price = ref('');
+const productName = ref('');
+const targetPrice = ref('');
 const alertError = ref('');
 
 const setPriceAlert = async () => {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.post('http://10.162.146.133:3000/user/price-alert', {
-      product: product.value,
-      price: price.value
+      productName: productName.value,
+      targetPrice: targetPrice.value
     }, {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (response.data.success) {
       alert('降价提醒设置成功');
-      product.value = '';
-      price.value = '';
+      productName.value = '';
+      targetPrice.value = '';
     } else {
       alertError.value = response.data.message;
     }
@@ -31,8 +31,8 @@ const setPriceAlert = async () => {
 <template>
   <div class="price-alert">
     <h2>设置降价提醒</h2>
-    <input type="text" v-model="product" placeholder="商品名称" />
-    <input type="number" v-model="price" placeholder="期望价格" />
+    <input type="text" v-model="productName" placeholder="商品名称" />
+    <input type="number" v-model="targetPrice" placeholder="期望价格" />
     <button @click="setPriceAlert">设置</button>
     <span v-if="alertError">{{ alertError }}</span>
   </div>
