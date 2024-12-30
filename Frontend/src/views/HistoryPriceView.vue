@@ -12,6 +12,7 @@ import {
   LinearScale,
   PointElement,
 } from 'chart.js';
+import router from '@/router';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
@@ -47,10 +48,13 @@ const fetchHistoryPrices = async () => {
       lowestPrice.value = data.lowestPrice;
       chartData.value.labels = historyPrices.value.map(item => item.date);
       chartData.value.datasets[0].data = historyPrices.value.map(item => item.price);
-    } else {
+    } else if (response.data.message === '未提供token' || response.data.message === '无效的token') {
+      router.push('/');
       console.error('获取历史价格失败', response.data.message);
     }
   } catch (error) {
+    alert('获取历史价格失败, 请重新登录');
+    router.push('/');
     console.error('获取历史价格失败', error);
   }
 };

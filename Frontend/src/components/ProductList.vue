@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import axios from 'axios';
+import router from '@/router';
 
 const props = defineProps({
   searchQuery: {
@@ -37,10 +38,13 @@ const searchProducts = async (query) => {
     if (response.data.success) {
       products.value = response.data.products;
       console.log('搜索商品信息成功');
-    } else {
+    } else if (response.data.message === '未提供token' || response.data.message === '无效的token') {
+      router.push('/');
       console.log('搜索商品信息失败', response.data.message);
     }
   } catch (error) {
+    alert('搜索商品信息失败, 请重新登录');
+    router.push('/');
     console.error('搜索商品信息失败', error);
   }
 };

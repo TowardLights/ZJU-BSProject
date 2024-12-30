@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import SearchBar from '@/components/SearchBar.vue';
 import ProductList from '@/components/ProductList.vue';
-import UserCenterLink from '@/components/UserCenterLink.vue';
 
 const searchQuery = ref('');
 
