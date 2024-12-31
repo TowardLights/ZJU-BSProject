@@ -21,6 +21,17 @@ router.post('/search', async (req, res) => {
     const { query } = req.body;
     try {
       const products = await fetchProducts(query, MAX_PAGES);
+      // 将每个产品插入到数据库中
+      for (const product of products) {
+        await dbApi.insertProduct(
+          product.product_name,
+          product.image_url,
+          product.current_price,
+          product.platform,
+          product.store_name,
+          product.product_url
+        );
+      }
       res.status(200).json({ success: true, products });
     } catch (error) {
       console.error('获取商品错误:', error);
