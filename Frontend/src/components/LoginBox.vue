@@ -54,7 +54,7 @@ const handleSubmit = async () => {
 
 const login = async () => {
   try {
-    const response = await axios.post('http://10.162.146.133:3000/user/login', {
+    const response = await axios.post('http://localhost:3000/user/login', {
       email: email.value,
       password: password.value,
     });
@@ -72,7 +72,7 @@ const login = async () => {
 
 const register = async () => {
   try {
-    const response = await axios.post('http://10.162.146.133:3000/user/register', {
+    const response = await axios.post('http://localhost:3000/user/register', {
       username: username.value,
       email: email.value,
       password: password.value,

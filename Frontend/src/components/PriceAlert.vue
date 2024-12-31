@@ -9,7 +9,7 @@ const alertError = ref('');
 const setPriceAlert = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post('http://10.162.146.133:3000/user/price-alert', {
+    const response = await axios.post('http://localhost:3000/user/price-alert', {
       productName: productName.value,
       targetPrice: targetPrice.value
     }, {

@@ -37,7 +37,7 @@ const chartData = ref({
 const fetchHistoryPrices = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post('http://10.162.146.133:3000/shopping/history-price', { productUrl: productUrl.value }, {
+    const response = await axios.post('http://localhost:3000/shopping/history-price', { productUrl: productUrl.value }, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (response.data.success) {

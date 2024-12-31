@@ -16,7 +16,7 @@ const itemsPerPage = 6;
 
 const fetchProducts = async () => {
   try {
-    const response = await axios.get('http://10.162.146.133:3000/shopping/products');
+    const response = await axios.get('http://localhost:3000/shopping/products');
     if (response.data.success && response.data.products.length > 0) {
       products.value = response.data.products;
       console.log('获取商品信息成功');
@@ -32,7 +32,7 @@ const fetchProducts = async () => {
 const searchProducts = async (query) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post('http://10.162.146.133:3000/shopping/search',
+    const response = await axios.post('http://localhost:3000/shopping/search',
       { query },
       { headers: { Authorization: `Bearer ${token}` } });
     if (response.data.success) {
