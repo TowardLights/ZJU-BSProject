@@ -1,0 +1,38 @@
+services:
+  vue-app:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - express-app
+    networks:
+      - app-network
+
+  express-app:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 200411
+      MYSQL_DATABASE: PriceCmpWeb
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  app-network:
+    driver: bridge
